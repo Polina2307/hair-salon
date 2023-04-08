@@ -1,8 +1,7 @@
-from flask import Flask
+from app import app
 from data import db_session
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+# app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
 def main():
