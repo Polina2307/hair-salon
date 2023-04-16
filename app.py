@@ -1,9 +1,6 @@
 from flask import Flask
-from config import Configuration
 
-from employee.blueprint import employee
+from config import Configuration
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
-
-app.register_blueprint(employee, url_prefix='/employee')
