@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+Новый мастер | Hair salon
+{% endblock %}
+
+{% block content_title %}
+<h1>Новый мастер</h1>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-6">
+    <form action="{{ url_for('employee.create')}}" method="post">
+
+        {% for field in form %}
+            <div class="form-group">
+                {{field.label(class='control-label')}}
+                {{field(class='form-control')}}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-dark">Сохранить</button>
+
+    </form>
+</div>
+{% endblock %}

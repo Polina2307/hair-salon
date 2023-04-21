@@ -18,4 +18,4 @@ def create_profile():
 def index():
     db_sess = db_session.create_session()
     # profiles = db_sess.query(Profile).all()
-    return render_template('profile/index.html')
+    return render_template('profile/home.html')
