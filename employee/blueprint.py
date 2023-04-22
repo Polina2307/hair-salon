@@ -1,12 +1,10 @@
 from flask import Blueprint, redirect, url_for
 from flask import render_template
-from employee.forms import EmployeeForm
-
 from flask import request
 
 from data import db_session
-
 from data.employee import Employee
+from employee.forms import EmployeeForm
 
 employee = Blueprint('employee', __name__, template_folder='templates')  # Экземпляр класса
 
@@ -28,6 +26,11 @@ def create():
 
     form = EmployeeForm()
     return render_template('employee/create.html', form=form)
+
+
+@employee.route('/edit', methods=['POST', 'GET'])
+def edit():
+    pass
 
 
 @employee.route('/')
