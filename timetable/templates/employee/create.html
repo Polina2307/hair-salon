@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-Изменение мастера
+Новый мастер
 {% endblock %}
 
 {% block content_title %}
-<h1>Изменение мастера</h1>
+<h1>Новый мастер</h1>
 {% endblock %}
 
 {% block content %}
 <div class="col-md-6">
-    <form action="{{ url_for('employee.edit', pk=now_employee.id)}}" method="post">
+    <form action="{{ url_for('employee.create')}}" method="post">
 
         {% for field in form %}
             <div class="form-group">
@@ -19,7 +19,7 @@
             </div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-dark">Изменить</button>
+        <button type="submit" class="btn btn-dark">Сохранить</button>
 
     </form>
 </div>
