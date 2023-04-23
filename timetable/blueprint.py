@@ -21,9 +21,9 @@ def create():
     if request.method == 'POST':
         date = datetime.strptime(request.form['date'], "%Y-%m-%d")
         employee_id = request.form['employee_id']
-        time_id = request.form['time_id']
+        reception_time_id = request.form['reception_time_id']
         try:
-            new_timetable = Timetable(date=date, employee_id=int(employee_id), reception_time_id=int(time_id))
+            new_timetable = Timetable(date=date, employee_id=int(employee_id), reception_time_id=int(reception_time_id))
             db_sess = db_session.create_session()
             db_sess.add(new_timetable)
             db_sess.commit()

@@ -1,7 +1,14 @@
+from _datetime import datetime
+from typing import Optional
+
 import sqlalchemy
-from sqlalchemy import Column, Integer, ForeignKey, Date, Time, String
+from aiogram.types import InlineKeyboardButton as Button
+from aiogram.types import InlineKeyboardMarkup as Markup
+from aiogram.types import Message
+from sqlalchemy import Column, Integer, ForeignKey, Date, String
 from sqlalchemy.orm import relationship
 
+from data import db_session
 from data.db_session import SqlAlchemyBase
 
 
@@ -21,9 +28,36 @@ class Timetable(SqlAlchemyBase):
     profile_id = Column(Integer, ForeignKey("profile.id"))
     profile = relationship("Profile", back_populates="timetables")
 
-    # def __init__(self, employee, reception_time):
-    #     self.employee = employee
-    #     self.reception_time = reception_time
+    @classmethod
+    def message_emp_date(cls, id_emp: int, new_message: Message):
+        """Формирование дат по конкретному мастеру"""
+        markup: Optional[Markup] = Markup()
+        db_sess = db_session.create_session()
+        date_today = datetime.today().date()
+        timetables = db_sess.query(Timetable).filter(Timetable.date >= date_today, Timetable.profile_id == None).filter(
+            Timetable.employee_id == id_emp).order_by(Timetable.date).all()
+        timetables_dict = dict()
+
+        for timetable in timetables:
+            timetables_dict[str(timetable.date)] = timetable.id
+        for key, value in timetables_dict.items():
+            markup.row(Button(text=str(key), callback_data=f"date_{value}"))
+        markup.row(Button(text="⤴️назад", callback_data=f"employee"))
+        new_message.reply_markup = markup
+
+    @classmethod
+    def message_emp_date_time(cls, id_tt: int, new_message: Message):
+        """Формирование свободных часов на конкретную лату конкретного мастера"""
+        markup: Optional[Markup] = Markup()
+        db_sess = db_session.create_session()
+        timetable: Timetable = db_sess.query(Timetable).get(id_tt)
+        timetables = db_sess.query(Timetable).filter(Timetable.date == timetable.date,
+                                                     Timetable.employee_id == timetable.employee_id,
+                                                     Timetable.profile_id == None).order_by(Timetable.id).all()
+        for timetable in timetables:
+            markup.row(Button(text=timetable.reception_time.time, callback_data=f"time_{timetable.reception_time_id}"))
+        markup.row(Button(text="⤴️назад", callback_data=f"employee"))
+        new_message.reply_markup = markup
 
 
 class ReceptionTime(SqlAlchemyBase):

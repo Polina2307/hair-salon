@@ -14,7 +14,7 @@
     {% for item in obj %}
     <div class="form-group">
         <p>
-            <a href="{{ url_for('timetable.edit', pk=item.id) }}">{{item.date}} {{item.reception_time.time}}:00 {{item.employee}}</a>
+            <a href="{{ url_for('timetable.edit', pk=item.id) }}">{{item.date}} {{item.reception_time.time}} {{item.employee}}</a>
         </p>
     </div>
     {% endfor %}
