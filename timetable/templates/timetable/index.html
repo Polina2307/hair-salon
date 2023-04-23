@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+Расписание
+{% endblock %}
+
+{% block content_title %}
+<h1>Расписание</h1>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-6">
+    <a class="btn btn-info" href="{{url_for('timetable.create')}}">Новое расписание</a>
+    {% for item in obj %}
+    <div class="form-group">
+        <p>
+            <a href="{{ url_for('timetable.edit', pk=item.id) }}">{{item.date}} {{item.reception_time.time}}:00 {{item.employee}}</a>
+        </p>
+    </div>
+    {% endfor %}
+    {% endblock %}
+</div>

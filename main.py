@@ -2,6 +2,7 @@ from app import app
 from data import db_session
 from employee.blueprint import employee
 from profile.blueprint import profile
+from timetable.blueprint import timetable
 
 
 import view
@@ -10,6 +11,7 @@ import view
 
 app.register_blueprint(employee, url_prefix='/employee')
 app.register_blueprint(profile, url_prefix='/profile')
+app.register_blueprint(timetable, url_prefix='/timetable')
 
 
 def main():

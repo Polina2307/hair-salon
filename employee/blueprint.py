@@ -45,5 +45,4 @@ def edit(pk):
 def index():
     db_sess = db_session.create_session()
     employees = db_sess.query(Employee).all()
-    # profiles = db_sess.query(Profile).all()
     return render_template('employee/index.html', obj=employees)

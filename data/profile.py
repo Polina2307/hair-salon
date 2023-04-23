@@ -12,4 +12,4 @@ class Profile(SqlAlchemyBase):
     nick = Column(String(20))
     id_tg = Column(Integer)
 
-    timetables = relationship("Timetable", back_populates="reception_time")
+    timetables = relationship("Timetable", back_populates="profile")

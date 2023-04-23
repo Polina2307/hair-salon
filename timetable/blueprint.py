@@ -1,49 +1,60 @@
+from datetime import datetime
+from tkinter.tix import Form
+
 from flask import Blueprint, redirect, url_for
 from flask import render_template
 from flask import request
+from wtforms import StringField, SelectField
 
 from data import db_session
+from data.timetable import Timetable
 from data.employee import Employee
-from employee.forms import EmployeeForm
+from timetable.forms import TimetableForm
+from data.timetable import ReceptionTime
 
-employee = Blueprint('employee', __name__, template_folder='templates')  # Экземпляр класса
+
+timetable = Blueprint('timetable', __name__, template_folder='templates')  # Экземпляр класса
 
 
-@employee.route('/create', methods=['POST', 'GET'])
+@timetable.route('/create', methods=['POST', 'GET'])
 def create():
     if request.method == 'POST':
-        name = request.form['name']
-        surname = request.form['surname']
-        middle_name = request.form['middle_name']
+        date = datetime.strptime(request.form['date'], "%Y-%m-%d")
+        employee_id = request.form['employee_id']
+        time_id = request.form['time_id']
         try:
-            new_employee = Employee(name=name, surname=surname, middle_name=middle_name)
+            new_timetable = Timetable(date=date, employee_id=int(employee_id), reception_time_id=int(time_id))
             db_sess = db_session.create_session()
-            db_sess.add(new_employee)
+            db_sess.add(new_timetable)
             db_sess.commit()
-            return redirect(url_for('employee.index'))
+            return redirect(url_for('timetable.index'))
         except Exception as err:
             print(err)
+    db_sess = db_session.create_session()
+    form = TimetableForm()
+    form.reception_time_id.choices = [(x.id, x.time) for x in db_sess.query(ReceptionTime).all()]
+    form.employee_id.choices = [(x.id, f"{x.surname} {x.name}") for x in db_sess.query(Employee).all()]
+    return render_template('timetable/create.html', form=form)
 
-    form = EmployeeForm()
-    return render_template('employee/create.html', form=form)
 
-
-@employee.route('/edit/<int:pk>', methods=['POST', 'GET'])
+@timetable.route('/edit/<int:pk>', methods=['POST', 'GET'])
 def edit(pk):
     db_sess = db_session.create_session()
-    now_employee = db_sess.query(Employee).filter(Employee.id == pk).first()
+    now_timetable = db_sess.query(Timetable).filter(Timetable.id == pk).first()
     if request.method == 'POST':
-        form = EmployeeForm(formdata=request.form, obj=now_employee)
-        form.populate_obj(now_employee)
+        form = TimetableForm(formdata=request.form, obj=now_timetable)
+        form.populate_obj(now_timetable)
         db_sess.commit()
-        return redirect(url_for('employee.index'))
-    form = EmployeeForm(obj=now_employee)
-    return render_template('employee/edit.html', now_employee=now_employee, form=form)
+        return redirect(url_for('timetable.index'))
+    form = TimetableForm(obj=now_timetable)
+    form.reception_time_id.choices = [(x.id, x.time) for x in db_sess.query(ReceptionTime).all()]
+    form.employee_id.choices = [(x.id, f"{x.surname} {x.name}") for x in db_sess.query(Employee).all()]
+    return render_template('timetable/edit.html', now_timetable=now_timetable, form=form)
 
 
-@employee.route('/')
+@timetable.route('/')
 def index():
     db_sess = db_session.create_session()
-    employees = db_sess.query(Employee).all()
-    # profiles = db_sess.query(Profile).all()
-    return render_template('employee/index.html', obj=employees)
+    timetables = db_sess.query(Timetable).all()
+    return render_template('timetable/index.html', obj=timetables)
+
