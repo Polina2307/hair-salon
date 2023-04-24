@@ -1,9 +1,4 @@
-from wtforms import Form, StringField, DateField, SelectField
-from data.employee import Employee
-
-
-def list_employee():
-    return Employee.query.all()
+from wtforms import Form, DateField, SelectField
 
 
 class TimetableForm(Form):

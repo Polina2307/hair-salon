@@ -7,4 +7,14 @@
     <orderEntry type="jdk" jdkName="Python 3.9 (hair-salon)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/timetable/templates" />
+        <option value="$MODULE_DIR$/templates" />
+        <option value="$MODULE_DIR$/profile/templates" />
+        <option value="$MODULE_DIR$/employee/templates" />
+      </list>
+    </option>
+  </component>
 </module>

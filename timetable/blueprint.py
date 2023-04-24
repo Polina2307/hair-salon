@@ -1,16 +1,14 @@
 from datetime import datetime
-from tkinter.tix import Form
 
 from flask import Blueprint, redirect, url_for
 from flask import render_template
 from flask import request
-from wtforms import StringField, SelectField
 
 from data import db_session
 from data.timetable import Timetable
 from data.employee import Employee
-from timetable.forms import TimetableForm
 from data.timetable import ReceptionTime
+from timetable.forms import TimetableForm
 
 
 timetable = Blueprint('timetable', __name__, template_folder='templates')  # Экземпляр класса
@@ -57,4 +55,5 @@ def index():
     db_sess = db_session.create_session()
     timetables = db_sess.query(Timetable).all()
     return render_template('timetable/index.html', obj=timetables)
+
 
